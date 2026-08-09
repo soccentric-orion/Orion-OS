@@ -1,0 +1,10 @@
+header:
+  version: 14
+
+repos:
+  meta-orion:
+    url: git@github.com:SiliconCentric/meta-orion.git
+    branch: scarthgap
+    path: meta/meta-orion
+    layers:
+      .:
