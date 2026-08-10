@@ -3,6 +3,7 @@ header:
   includes:
     - repos/poky.yaml
     - repos/meta-openembedded.yaml
+    - repos/meta-st-stm32mp.yaml
     - repos/meta-swupdate.yaml
     - repos/meta-orion.yaml
 
@@ -29,3 +30,13 @@ local_conf_header:
 
     # Swupdate specific variables
     SWUPDATE_INIT = "systemd"
+
+    # STM32MP1 BSP needs the OpenEmbedded python layer (meta-python) for OP-TEE.
+    # meta-st-stm32mp pulls that in; keep it available.
+
+    # STM32MP1 proprietary GPU / multimedia binaries are covered by the
+    # STMicroelectronics EULA. Accept it so the GPU/firmware can be pulled in.
+    ACCEPT_EULA_stm32mp15-disco = "1"
+
+    # STM32MP1 boots: ROM → FSBL (TF-A) → OP-TEE → U-Boot → Linux (Image).
+    # Kernel is Image; DTB is stm32mp157f-dk2.dtb.

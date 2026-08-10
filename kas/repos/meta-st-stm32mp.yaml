@@ -1,0 +1,9 @@
+header:
+  version: 14
+
+repos:
+  meta-st-stm32mp:
+    url: https://github.com/STMicroelectronics/meta-st-stm32mp
+    refspec: scarthgap
+    layers:
+      .:

@@ -3,11 +3,11 @@ header:
   includes:
     - ../common.yaml
 
-# Generic x86-64 target (genericx86-64 is in meta-yocto-bsp, part of poky).
-# Hardware-neutral default so the build works with no extra BSP layer.
-machine: genericx86-64
+# STM32MP157F-DK2 Discovery board — OP-TEE + SD card boot
+# Machine config lives in meta-st-stm32mp (scarthgap).
+machine: stm32mp15-disco
 
 local_conf_header:
   wks: |
-    # A/B OTA partition layout (see meta/meta-orion/wic/sdimage-x86.wks)
-    WKS_FILE = "sdimage-x86.wks"
+    # A/B OTA partition layout (see meta/meta-orion/wic/sdimage-stm32mp1.wks)
+    WKS_FILE = "sdimage-stm32mp1.wks"

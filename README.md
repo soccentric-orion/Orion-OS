@@ -1,13 +1,13 @@
 # Orion-OS
 
-Containerized Yocto/OpenEmbedded build system using `kas` + Docker.
-Hardware-neutral template targeting `genericx86-64` (EFI/GRUB boot) by
-default, with A/B OTA updates via SWUpdate.
+Containerized Yocto/OpenEmbedded build system using `kas` + Docker for the
+**ST STM32MP1** platform (default board: STM32MP157F-DK2 Discovery), with A/B
+OTA updates via SWUpdate.
 
 ## Quick Start
 
 ```bash
-# Build default board (generic x86-64)
+# Build default board (STM32MP157F-DK2)
 make image
 
 # Explicit board selection
@@ -33,7 +33,8 @@ make flash orion DEVICE=/dev/sdX
 - `kas/boards/*.yaml`: machine-specific board files
 - `kas/repos/*.yaml`: external layer repository definitions
 
-Layer repos: `poky`, `meta-openembedded`, `meta-swupdate`, `meta-orion`.
+Layer repos: `poky`, `meta-openembedded`, `meta-st-stm32mp`, `meta-swupdate`,
+`meta-orion`.
 
 ## Common Targets
 

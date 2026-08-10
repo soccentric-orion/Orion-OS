@@ -1,29 +1,36 @@
 # Orion-OS
 
 **Remote:** `git@github.com:SiliconCentric/Orion-OS.git`
-**Parent project:** [Orion](../Orion.md)
+**Parent project:** [Orion](../Orion.md) (target hardware: **ST STM32MP1** microprocessor, Cortex-A7 + Cortex-M4 co-processor.)
 **Leaf type:** `<Project>-OS`
-**Status:** REAL — feature-complete generic x86-64 build template
+**Status:** REAL — actively built out
 
-Hardware-neutral Yocto/OpenEmbedded build system targeting `genericx86-64`
-(EFI/GRUB boot) by default. Board/SoC/vendor-BSP specifics are supplied by a
-target configuration in `kas/boards/*.yaml`; the repo builds out of the box
-with no vendor BSP layer. A/B OTA via `swupdate`.
+Yocto-based embedded Linux OS for the **ST STM32MP1** platform. Built with
+`kas` + Docker against the `meta-st-stm32mp` (scarthgap) layer set, with A/B
+OTA via `swupdate`.
 
-**Board:** default `orion` (machine `genericx86-64`). Platform customization
-lives in `meta/meta-orion` (committed locally); upstream layers (`poky`,
-`meta-openembedded`, `meta-swupdate`) are checked out by kas into a
-**gitignored** `layers/` directory and must never be hand-edited.
+**Board:** default `orion` (machine `stm32mp15-disco`, STM32MP157F-DK2
+Discovery). Platform customization lives in `meta/meta-orion` (committed
+locally); upstream layers (`poky`, `meta-openembedded`, `meta-st-stm32mp`,
+`meta-swupdate`) are checked out by kas into a **gitignored** `layers/`
+directory and must never be hand-edited.
 
 **Targets:** `make build`, `make image`, `make shell [board]`, `make swu`,
 `make sdk`/`esdk`, `make flash`, `make deploy-*`, `make clean`/`clean-all`.
 
-**A/B OTA layout:** EFI GPT — `boot` (FAT32), `rootfs-a`, `rootfs-b`
-(switched by swupdate via filesystem label), `data` (`/home`, persistent).
-See `meta/meta-orion/wic/sdimage-x86.wks`.
+**Boot flow (STM32MP157F-DK2):**
+```
+ROM → FSBL (TF-A) → OP-TEE → U-Boot → Linux (Image + stm32mp157f-dk2.dtb)
+                             → systemd → Orion-HAL, Orion services
+```
+
+**A/B OTA layout:** `boot` (FAT32), `rootfs-a`, `rootfs-b` (ext4, switched by
+swupdate via filesystem label + U-Boot env), `data` (`/home`, persistent).
+See `meta/meta-orion/wic/sdimage-stm32mp1.wks`.
 
 **Local layer:** `meta/meta-orion` is committed in-repo (see `.gitignore`),
-matching the Acadia/Arches/Zion/Joshua/Pinnacle/Sequoia convention.
+matching the Acadia/Arches/Zion/Joshua/Pinnacle/Sequoia/Vela/Polaris
+convention.
 
 ---
 Part of the `Orion` project in the `project-managers` fleet. See

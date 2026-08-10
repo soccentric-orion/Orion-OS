@@ -1,5 +1,5 @@
 # =============================================================================
-# Orion OS — Intel x86 (LattePanda) Yocto Build System
+# Orion OS — ST STM32MP1 Yocto Build System
 # =============================================================================
 
 # --- Image names -------------------------------------------------------------
@@ -37,7 +37,7 @@ endif
 
 # --- Board -------------------------------------------------------------------
 # Select target board — must match a file in kas/boards/<BOARD>.yaml
-# Boards: orion (genericx86-64 / LattePanda)
+# Boards: orion (STM32MP157F-DK2)
 BOARD            ?= orion
 KAS_CONFIG       := kas/boards/$(BOARD).yaml
 
@@ -182,8 +182,26 @@ swu: build
 	    { echo "ERROR: No .rootfs.ext4 found. Ensure 'ext4' is in IMAGE_FSTYPES."; exit 1; }
 	@echo "Packaging OTA update from: $(ROOTFS)"
 	@mkdir -p $(BUILD_DIR)/swu
+
+	# --- rootfs ---
 	@gzip -kfc "$(ROOTFS)" > "$(BUILD_DIR)/swu/rootfs.ext4.gz"
-	@sed "s|@@VERSION@@|$(SWU_VERSION)|" \
+
+	# --- kernel + DTB (RZ/G2L) ---
+	$(eval KERNEL := $(shell find $(BUILD_DIR)/tmp/deploy/images/$(MACHINE) \
+	    -name 'Image' 2>/dev/null | sort -V | tail -1))
+	$(eval DTB := $(shell find $(BUILD_DIR)/tmp/deploy/images/$(MACHINE) \
+	    -name 'stm32mp157f-dk2.dtb' 2>/dev/null | sort -V | tail -1))
+	@test -n "$(KERNEL)" || \
+	    { echo "WARNING: Image not found — kernel will not be updated in this .swu"; }
+	@test -n "$(DTB)" || \
+	    { echo "WARNING: stm32mp157f-dk2.dtb not found — DTB will not be updated in this .swu"; }
+	@[ -n "$(KERNEL)" ] && cp "$(KERNEL)" "$(BUILD_DIR)/swu/Image" || true
+	@[ -n "$(DTB)" ]    && cp "$(DTB)"    "$(BUILD_DIR)/swu/stm32mp157f-dk2.dtb" || true
+
+	# --- sw-description ---
+	@sed -e "s|@@VERSION@@|$(SWU_VERSION)|" \
+	    -e "s|@@KERNEL@@|Image|" \
+	    -e "s|@@DTB@@|stm32mp157f-dk2.dtb|" \
 	    meta/meta-orion/swupdate/sw-description \
 	    > "$(BUILD_DIR)/swu/sw-description"
 	@cp meta/meta-orion/swupdate/pre-install.sh  "$(BUILD_DIR)/swu/"
@@ -196,17 +214,18 @@ swu: build
 	        "$(BUILD_DIR)/swu/sw-description"; \
 	    echo "Packing SIGNED .swu ..."; \
 	    cd "$(BUILD_DIR)/swu" && \
-	        printf 'sw-description\nsw-description.sig\npre-install.sh\npost-install.sh\nrootfs.ext4.gz\n' | \
+	        printf 'sw-description\nsw-description.sig\npre-install.sh\npost-install.sh\nrootfs.ext4.gz\nImage\nstm32mp157f-dk2.dtb\n' | \
 	        cpio -ov -H newc > "$(BUILD_DIR)/$(BOARD)-$(SWU_VERSION).swu"; \
 	else \
 	    echo "WARNING: No private key found — packing UNSIGNED .swu (run scripts/generate-swu-keys.sh to enable signing)"; \
 	    cd "$(BUILD_DIR)/swu" && \
-	        printf 'sw-description\npre-install.sh\npost-install.sh\nrootfs.ext4.gz\n' | \
+	        printf 'sw-description\npre-install.sh\npost-install.sh\nrootfs.ext4.gz\nImage\nstm32mp157f-dk2.dtb\n' | \
 	        cpio -ov -H newc > "$(BUILD_DIR)/$(BOARD)-$(SWU_VERSION).swu"; \
 	fi
 	@echo "OTA package: $(BUILD_DIR)/$(BOARD)-$(SWU_VERSION).swu"
 	@$(MAKE) --no-print-directory deploy-swu DEPLOY_TS=$(DEPLOY_TS)
 
+## Flash to SD/eMMC.  Usage: make flash orion DEVICE=/dev/sdX
 ## Flash to SD/eMMC.  Usage: make flash orion DEVICE=/dev/sdX
 flash:
 ifndef DEVICE
@@ -305,5 +324,5 @@ help:
 	@printf "\nUtilities:\n"
 	@printf "  %-24s %s\n" "completion"         "Install bash tab-completion"
 	@printf "\nBoards:\n"
-	@printf "  orion (genericx86-64 / LattePanda)\n"
+	@printf "  orion (STM32MP157F-DK2)\n"
 	@printf "\n"
