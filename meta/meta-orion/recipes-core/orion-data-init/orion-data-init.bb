@@ -9,7 +9,6 @@ SRC_URI = " \
     file://orion-data-init.service \
 "
 
-S = "${WORKDIR}"
 
 inherit systemd
 

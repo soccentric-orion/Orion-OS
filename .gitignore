@@ -62,3 +62,9 @@ deploy/
 meta/*
 !meta/meta-orion/
 !meta/meta-orion/**
+
+# ─── Upstream Yocto layers checked out by kas at the repo root ──────────────
+meta-openembedded/
+meta-st-stm32mp/
+meta-swupdate/
+poky/

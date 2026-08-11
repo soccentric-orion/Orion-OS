@@ -7,6 +7,10 @@ LICENSE = "MIT"
 require recipes-extended/images/core-image-full-cmdline.bb
 IMAGE_FEATURES += "ssh-server-openssh"
 
+# Boot partition (p1) contents for bootimg-partition: the kernel image and the
+# STM32MP1 device tree (both deployed under the kernel/ subdir).
+IMAGE_BOOT_FILES = "kernel/${KERNEL_IMAGETYPE};${KERNEL_IMAGETYPE} kernel/stm32mp157f-dk2.dtb;stm32mp157f-dk2.dtb"
+
 # OTA / swupdate — install the A/B runtime on the STM32MP1 discovery board
 IMAGE_INSTALL:append:stm32mp15-disco = " swupdate swupdate-www orion-swupdate-config"
 
