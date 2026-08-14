@@ -1,6 +1,6 @@
 # Orion-OS
 
-**Remote:** `git@github.com:SiliconCentric/Orion-OS.git`
+**Remote:** `git@github.com:soccentric-orion/Orion-OS.git`
 **Parent project:** [Orion](../Orion.md) (target hardware: **ST STM32MP1** microprocessor, Cortex-A7 + Cortex-M4 co-processor.)
 **Leaf type:** `<Project>-OS`
 **Status:** REAL — actively built out

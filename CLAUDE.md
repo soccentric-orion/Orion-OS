@@ -59,7 +59,7 @@ rollback. `make swu` builds an `.swu` package; signing via
 | `meta-oe` / `meta-python` | meta-openembedded (scarthgap) | Package set + OP-TEE deps   |
 | `meta-st-stm32mp`   | STMicroelectronics/meta-st-stm32mp (scarthgap) | STM32MP1 BSP |
 | `meta-swupdate`     | sbabic/meta-swupdate (scarthgap) | swupdate OTA framework           |
-| `meta-orion`        | SiliconCentric/meta-orion (local, in `meta/`) | Orion image, HAL, swu config |
+| `meta-orion`        | soccentric-orion/meta-orion (local, in `meta/`) | Orion image, HAL, swu config |
 
 ## Repo Notes
 
