@@ -10,8 +10,8 @@ Yocto-based embedded Linux OS for the **ST STM32MP1** platform. Built with
 OTA via `swupdate`.
 
 **Board:** default `orion` (machine `stm32mp15-disco`, STM32MP157F-DK2
-Discovery). Platform customization lives in `meta/meta-orion` (committed
-locally); upstream layers (`poky`, `meta-openembedded`, `meta-st-stm32mp`,
+Discovery). Platform customization lives in `meta/meta-orion`, a nested clone
+of its own upstream `soccentric-orion/meta-orion` (fetched by kas); upstream layers (`poky`, `meta-openembedded`, `meta-st-stm32mp`,
 `meta-swupdate`) are checked out by kas into a **gitignored** `layers/`
 directory and must never be hand-edited.
 
@@ -28,9 +28,8 @@ ROM → FSBL (TF-A) → OP-TEE → U-Boot → Linux (Image + stm32mp157f-dk2.dtb
 swupdate via filesystem label + U-Boot env), `data` (`/home`, persistent).
 See `meta/meta-orion/wic/sdimage-stm32mp1.wks`.
 
-**Local layer:** `meta/meta-orion` is committed in-repo (see `.gitignore`),
-matching the Acadia/Arches/Zion/Joshua/Pinnacle/Sequoia/Vela/Polaris
-convention.
+**Local layer:** `meta/meta-orion` is a nested clone with its own upstream
+at `soccentric-orion/meta-orion.git` (see `.gitignore`).
 
 ---
 Part of the `Orion` project in the `project-managers` fleet. See
