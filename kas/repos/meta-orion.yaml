@@ -3,8 +3,8 @@ header:
 
 repos:
   meta-orion:
-    url: git@github.com:SiliconCentric/meta-orion.git
-    branch: scarthgap
+    url: git@github.com:soccentric-orion/meta-orion.git
+    branch: develop
     path: meta/meta-orion
     layers:
       .:
