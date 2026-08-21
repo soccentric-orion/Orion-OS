@@ -1,48 +1,34 @@
 # Orion-OS
 
-Containerized Yocto/OpenEmbedded build system using `kas` + Docker for the
-**ST STM32MP1** platform (default board: STM32MP157F-DK2 Discovery), with A/B
-OTA updates via SWUpdate.
+## Project Summary
 
-## Quick Start
+Orion-OS is Orion's containerized Yocto/OpenEmbedded build system for the ST STM32MP1 family, with STM32MP157F-DK2 Discovery as the default board and `stm32mp15-disco` as its machine. It keeps Yocto execution inside Docker and uses `kas` to compose pinned external layers and target configuration. Its output is embedded Linux intended to host Orion's client, HAL, configuration service, and other platform components; this leaf does not implement those sibling applications.
+
+The root Makefile builds images, opens shells, creates SDK and eSDK artifacts, rebuilds images, packages and signs SWUpdate bundles, deploys artifacts, flashes WIC images with bmap checks, and cleans build or Docker state. `kas/common.yaml` supplies shared repositories, distro settings, systemd, image types, and cache behavior. `kas/boards/orion.yaml` supplies board-specific machine and boot details, while `kas/repos/` records `poky`, ST, SWUpdate, and Orion layer locations.
+
+Dedicated Docker contexts, SWUpdate key-generation tooling, shell completion, feature inventory, layout guidance, changelog, and repository map support the workflow. There is no conventional source-unit test directory here. Validation is configuration and build oriented: board checks, linting, validation scripts, and actual image/SDK builds are the meaningful evidence. Docker, layer-repository access, disk space, and target hardware are prerequisites for the complete workflow.
+
+## Feature Inventory
+
+| # | Name / Description | Implemented? | Test Coverage? | Manual Test |
+|---:|---|---|---|---|
+| 1 | Dockerized Yocto/kas build environment | Implemented | Unknown: environment dependent | [ ] Manual verification required |
+| 2 | Default board and STM32MP1 machine config | Implemented | Partial: board checks documented | [ ] Manual verification required |
+| 3 | Shared kas repository/layer composition | Implemented | Unknown | [ ] Manual verification required |
+| 4 | Yocto image and WIC deployment output | Implemented | Unknown: build not evidenced here | [ ] Manual verification required |
+| 5 | SDK and eSDK generation | Implemented | Unknown | [ ] Manual verification required |
+| 6 | Interactive kas/BitBake shell | Implemented | Unknown | [ ] Manual verification required |
+| 7 | SWUpdate packaging and signing | Implemented | Unknown: device workflow unverified | [ ] Manual verification required |
+| 8 | bmaptool flash workflow | Implemented | Unknown | [ ] Manual verification required |
+| 9 | systemd and meta-orion image composition | Implemented | Unknown: external layer required | [ ] Manual verification required |
+| 10 | Cleanup, deployment, completion, validation | Implemented | Unknown | [ ] Manual verification required |
+
+## Common Commands
 
 ```bash
-# Build default board (STM32MP157F-DK2)
-make image
-
-# Explicit board selection
 make image orion
-
-# Open shell in build container
 make shell orion
-
-# Flash latest WIC image
+make sdk orion
+make swu
 make flash orion DEVICE=/dev/sdX
 ```
-
-## Prerequisites
-
-- Docker 20.10+
-- GNU Make 4.0+
-- curl
-- bmaptool (for `make flash`)
-
-## KAS Layout
-
-- `kas/common.yaml`: shared distro/target/cache settings
-- `kas/boards/*.yaml`: machine-specific board files
-- `kas/repos/*.yaml`: external layer repository definitions
-
-Layer repos: `poky`, `meta-openembedded`, `meta-st-stm32mp`, `meta-swupdate`,
-`meta-orion`.
-
-## Common Targets
-
-- `make build [board]` / `make image [board]`
-- `make sdk [board]` / `make esdk [board]`
-- `make shell [board]`
-- `make flash [board] DEVICE=/dev/sdX`
-- `make swu` (OTA package)
-- `make help`
-
-See `CLAUDE.md` / `REPO_MAP.md` for full details.
