@@ -6,6 +6,8 @@ header:
     - repos/meta-st-stm32mp.yaml
     - repos/meta-swupdate.yaml
     - repos/meta-orion.yaml
+    - repos/orion-configuration.yaml
+    - repos/orion-instrumentation.yaml
 
 distro: poky
 target: orion-image
