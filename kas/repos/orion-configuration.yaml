@@ -7,7 +7,7 @@ repos:
   # manifest). Only that subdirectory is a layer; the rest of the repo
   # (Rust workspace, frontend source) is not needed by the build.
   orion-configuration:
-    url: git@github.com:soccentric-orion/Orion-Configuration.git
+    url: https://github.com/soccentric-orion/Orion-Configuration.git
     branch: develop
     path: meta/orion-configuration
     layers:

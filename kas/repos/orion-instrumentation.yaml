@@ -12,7 +12,7 @@ repos:
   # ship an empty package. See Orion-Instrumentation/yocto's layer.conf and
   # instrumentation.bb for the parts still needing board-specific work.
   orion-instrumentation:
-    url: git@github.com:soccentric-orion/Orion-Instrumentation.git
+    url: https://github.com/soccentric-orion/Orion-Instrumentation.git
     branch: develop
     path: meta/orion-instrumentation
     layers:
